@@ -5,7 +5,7 @@ public class Gradient {
         // Génération du dégradé de bleu
         for (int y = 0; y < img.getHeight(); y++) {
             for (int x = 0; x < img.getWidth(); x++) {
-                int bleu = 0; // quel calcule ?
+                int bleu = img.getWidth() * x / img.getValeurMax();
                 img.setPixel(x, y, 0, 0, bleu);
             }
         }

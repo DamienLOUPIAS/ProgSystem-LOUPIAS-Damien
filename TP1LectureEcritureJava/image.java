@@ -2,6 +2,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class Image {
+	
+	private final static int VALEUR_MAX = 255;
 
     private int width;
     private int height;
@@ -10,6 +12,7 @@ public class Image {
 
     public int getWidth() { return width; }
     public int getHeight() { return height; }
+	public int getValeurMax() { return VALEUR_MAX; }
 
     /**
      * Constructeur : initialise une image vide.
@@ -35,6 +38,40 @@ public class Image {
      * Sauvegarde l'image au format texte PPM (P3)
      */
     public void save_txt(String filename) throws IOException {
-        // TODO : écrire le fichier PPM avec FileWriter
+		
+		 try {
+            FileWriter writer = new FileWriter(filename);
+
+           
+
+            writer.write("P3\n");
+            // Écriture des dimensions
+            writer.write(this.getWidth() + " " + this.getHeight() + "\n");
+            // Écriture de la valeur maximal
+
+            // Écriture des pixels
+            writer.write(VALEUR_MAX + "\n");
+			
+			// Ecriture dans le fichier
+			for (int py = 0; py < this.height; py++) {
+				// Génère les lignes
+				for (int px = 0; px < this.width; px++) {
+				// Génère les pixels
+					for (int valColor = 0; valColor <= 2; valColor++) {
+						// Génère les différente couleur 
+						writer.write(this.pixels[py][px][valColor] + " ");
+						
+					}				
+				}
+				writer.write("\n");
+			}
+
+           
+
+            writer.close(); // Fermeture du fichier
+
+        } catch (IOException e) {
+            System.err.println("Erreur lors de l'écriture du fichier : " + e.getMessage());
+        }
     }
 }
