@@ -115,7 +115,9 @@ public class Image {
 			
 		
 			 
-			
+			/** L'avantage d'avoir un seul write (et pas un dans les trois boucles) c'est qu'il y a un seul syscall.
+				De ce fait même si la quantité de donnée a écrire est la même, alors la réduction drastique de syscall (l'operation
+				qui prend le plus de temps dans l'écriture) améliore la vitesse d'exécution.*/
 			fos.write(aRetourner);
 
 			System.out.println("Data successfully written to the file.");
