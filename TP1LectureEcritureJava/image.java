@@ -1,5 +1,6 @@
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.FileOutputStream;
 
 public class Image {
 	
@@ -81,25 +82,20 @@ public class Image {
      */
     public void save_binaire(String filename) throws IOException {
 		
-		 try {
-            FileWriter writer = new FileWriter(filename);
-			
-			//tableau de byte contenant les bonnes valeur pour construire l'image.
-			byte[] aRetourner = new byte[this.getWidth()*this.getHeight()*3];
-			
-			// Curseur qui nous permet "d'écrire" dans le tableau comme on a fait précédement avec writer
-			int curseur = 0;
-			
-			int = passage;
+		//tableau de byte contenant les bonnes valeur pour construire l'image.
+		byte[] aRetourner = new byte[this.getWidth()*this.getHeight()*3];
+		
+		// Curseur qui nous permet "d'écrire" dans le tableau comme on a fait précédement avec writer
+		int curseur = 0;
+		
+		int passage;
 		   
-			// header
-            writer.write("P6\n");
-            // Écriture des dimensions
-            writer.write(this.getWidth() + " " + this.getHeight() + "\n");
-            // Écriture de la valeur maximal
-
-            // Écriture des pixels
-            writer.write(VALEUR_MAX + "\n");
+		 try {
+            
+			FileOutputStream fos = new FileOutputStream(filename);
+		
+			fos.write(("P6\n" + this.getWidth() + " " + this.getHeight() + "\n" + VALEUR_MAX + "\n").getBytes());
+		
 			
 			// Ecriture dans le fichier
 			for (int py = 0; py < this.height; py++) {
@@ -109,7 +105,7 @@ public class Image {
 					for (int valColor = 0; valColor <= 2; valColor++) {
 						// Génère les différente couleur 
 						passage = this.pixels[py][px][valColor];
-						aRetourner[curseur] = (byte) (passage 0xFF)
+						aRetourner[curseur] = (byte) (passage & 0xFF);
 						curseur++;
 						
 					}				
@@ -117,27 +113,19 @@ public class Image {
 			}
 			
 			
-			writer.close(); // Fermeture du fichier
+		
+			 
+			
+			fos.write(aRetourner);
+
+			System.out.println("Data successfully written to the file.");
+			
+			fos.close();
+		} catch (IOException e) {
+			System.out.println("An error occurred: ");
+		}
 			
 			
-			try (FileOutputStream fos = new FileOutputStream(filename)) {
-                 
-           
-				fos.write(aRetourner);
 
-				System.out.println("Data successfully written to the file.");
-			}
-			catch (IOException e) {
-				System.out.println("An error occurred: ");
-			}
-			
-
-           
-
-        
-
-        } catch (IOException e) {
-            System.err.println("Erreur lors de l'écriture du fichier : " + e.getMessage());
-        }
     }
 }
