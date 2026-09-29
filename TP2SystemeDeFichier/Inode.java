@@ -16,7 +16,7 @@ public class Inode {
 
     public int getInodeOffset() {
         // Calculer l'offset exact de l'inode.
-        return MemoryManager.INODE_TABLE_OFFSET + inodeNumber * INODE_SIZE;
+        return MemoryManager.INODE_TABLE_OFFSET + (inodeNumber) * INODE_SIZE;
     }
 
     public int getFileType() {
