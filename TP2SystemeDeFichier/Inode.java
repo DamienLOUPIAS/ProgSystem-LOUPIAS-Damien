@@ -14,6 +14,7 @@ public class Inode {
         this.inodeNumber = inodeNumber;
     }
 
+
     public int getInodeOffset() {
         // Calculer l'offset exact de l'inode.
         return MemoryManager.INODE_TABLE_OFFSET + (inodeNumber) * INODE_SIZE;
@@ -60,33 +61,45 @@ public class Inode {
         short permissions,
         int linkCount) {
 
-    byte[] memory =
-            memoryManager.getFilesystemMemory();
+        byte[] memory =
+                memoryManager.getFilesystemMemory();
 
-    int offset = getInodeOffset();
-	int curseur = 0;
+        int offset = getInodeOffset();
+        int curseur = 0;
 
-    // TODO:
-    // 1. Numéro d'inode
-	
-	curseur += Utils.writeInt(memory, offset + curseur, this.inodeNumber);
-    // 2. Type
-	curseur += Utils.writeInt(memory, offset + curseur, fileType);
-    // 3. Taille
-	curseur += Utils.writeInt(memory, offset + curseur, fileSize);
-    // 4. Création
-	curseur += Utils.writeLong(memory, offset + curseur, creationTime);
-    // 5. Modification
-	curseur += Utils.writeLong(memory, offset + curseur, modificationTime);
-    // 6. 10 pointeurs directs
-	for (int elt : directPointers) {
-		curseur += Utils.writeInt(memory, offset + curseur, elt);
+        // TODO:
+        // 1. Numéro d'inode
+        
+        curseur += Utils.writeInt(memory, offset + curseur, this.inodeNumber);
+        // 2. Type
+        curseur += Utils.writeInt(memory, offset + curseur, fileType);
+        // 3. Taille
+        curseur += Utils.writeInt(memory, offset + curseur, fileSize);
+        // 4. Création
+        curseur += Utils.writeLong(memory, offset + curseur, creationTime);
+        // 5. Modification
+        curseur += Utils.writeLong(memory, offset + curseur, modificationTime);
+        // 6. 10 pointeurs directs
+        for (int elt : directPointers) {
+            curseur += Utils.writeInt(memory, offset + curseur, elt);
+        }
+        // 7. Pointeur indirect
+        curseur += Utils.writeInt(memory, offset + curseur, indirectPointer);
+        // 8. Permissions
+        curseur += Utils.writeShort(memory, offset + curseur, permissions);
+        // 9. Nombre de liens
+        curseur += Utils.writeInt(memory, offset + curseur, linkCount);
 	}
-    // 7. Pointeur indirect
-	curseur += Utils.writeInt(memory, offset + curseur, indirectPointer);
-    // 8. Permissions
-	curseur += Utils.writeShort(memory, offset + curseur, permissions);
-    // 9. Nombre de liens
-	curseur += Utils.writeInt(memory, offset + curseur, linkCount);
-	}
+
+    public void updateInode(int fileSize, int[] directPointers) {
+        int offset = getInodeOffset();
+        byte[] memory = memoryManager.getFilesystemMemory();
+        Utils.writeInt(memory, offset + 8, fileSize);
+        Utils.writeLong(memory, offset + 20, System.currentTimeMillis());
+        for (int i = 0; i < DIRECT_POINTERS; i++) {
+            Utils.writeInt(memory, offset + 28 + i * 4, directPointers[i]);
+        }
+    }
+
+
 }
