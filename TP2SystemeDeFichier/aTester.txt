@@ -1,0 +1,66 @@
+# <span style="color:orange">Chapitre 1 : Variable aléatoire discrètes (Vad)</span>
+
+## I) Généralités
+
+### 1)  Exemple
+
+#### Contexte de l'exemple
+
+On lance un pièce de monnaie trois fois d'affilée, c'est donc une expérience aléatoire. Lorsque l'expérience commence, la cagnotte est de 0€, a chaque fois que la pièce tombe sur pile, on ajoute un euro a la cagnotte, a chaque fois que la pièce tombe sur face, on multiplie la cagnotte par deux.
+
+#### Ce que l'on en déduit
+
+Remarque :   $\Omega$  désigne l'univers, donc toutes les possibilité qui peuvent se produire a l'issu du lancé.
+$$\Omega = \{ppp, ppf, ...\}$$ Soit $X$, la cagnotte à l'issue de trois lancés ($X$, symbolise donc le gain)
+
+
+![[diagrammeVennX.png]]
+
+
+$$X(\Omega) = \{0,1,2,3,4\} \subset \mathbb{R}$$
+
+On retrouve donc toute les valeur prise par $X$ dans un sous ensemble discret de $\mathbb{R}$.
+
+Rappel : Inclus ($\subset$), permet d'indiquer qu'un sous ensemble faire partit d'un autre ensemble contrairement a appartient ($\in$) qui lui permet d'indiquer d'un élément fait partit d'un ensemble.
+
+
+### 2) Définition :
+
+$\Omega$ un univers associé a une expérience aléatoire.
+$X : \Omega \implies R$ 
+$\omega \implies X(\omega)$
+
+Si $X(\Omega)$ est un ensemble discret de $\mathbb{R}$, alors $X$ est une variable aléatoire discrète.
+
+### 3) Loi d'une variable aléatoire discrète
+
+
+| valeur possible | $x_i$ |       0       |       1       |       2       |       3       |       4       |
+| :-------------: | :---: | :-----------: | :-----------: | :-----------: | :-----------: | :-----------: |
+|   probabilité   | $p_i$ | $\frac{1}{8}$ | $\frac{1}{8}$ | $\frac{1}{4}$ | $\frac{1}{4}$ | $\frac{1}{4}$ |
+
+#### Remarques :
+
+1) On peut avoir une infinité de valeur possible pour $X$ (ex : $X(\Omega) = \mathbb{N}$)
+2) $\sum p_i = 1$ 
+3)<span style="color:red"> //TODO insérer graphique</span>
+
+### 4) Fonction de représentation d'une variable aléatoire (VA).
+
+#### Définition : 
+
+Soit $X$ une variable aléatoire, la fonction 
+ $F:  \mathbb{R} \implies [0,1]$
+    $t \implies F(t) = P(X \le t)$
+
+est la fonction de répartition associé a $X$.
+
+#### Retour a l'exemple :
+
+$F(\frac{1}{2}) = P(X \leq \frac{1}{2}) = \frac{1}{2}$
+$F( -1, 1) = 0$
+$F(5, 4) = 1$
+
+La fonction n'est pas continue donc on a bien un ensemble discret.
+
+<span style="color:red">//TODO shemas</span>
