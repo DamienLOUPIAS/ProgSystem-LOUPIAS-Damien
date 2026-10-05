@@ -419,6 +419,135 @@ public class TestRunner {
         System.out.println("[OK] Étape 9 validée !");
     }
 
+public static void testEleve1E9() {
+    System.out.println("=== TEST ÉTAPE 9.1 : Entrées/Sorties Fichier ===");
+
+    VirtualFileSystem vfs = new VirtualFileSystem();
+
+    assert vfs.createFile("/", "test.txt");
+
+
+    byte[] original = new byte[512]; 
+
+    Utils.writeInt(original, 0, 255);
+    Utils.writeInt(original, 508, 255);
+
+    boolean writeOk = vfs.writeFile(0, original);
+
+    assert writeOk : "Erreur d'écriture";
+
+    Inode inode = new Inode(vfs.getMemoryManager(), 0);
+
+    assert inode.getFileSize() == original.length : "Taille d'inode incorrecte";
+
+    byte[] readBytes = vfs.readFile(0);
+
+    assert readBytes != null : "Buffer null";
+
+    assert readBytes.length == original.length : "Longueur lue incorrecte";
+
+    for (int i = 0; i < original.length; i++) {
+        assert readBytes[i] == original[i] : "Octet incorrect à l'indice " + i;
+    }
+
+    int verificateur = 0;
+    for (int elt : inode.getDirectPointers()) {
+        if (elt != 0) {
+            verificateur++;
+        }
+    }
+    assert verificateur == 1 : "Problème de pointeurs directs";
+
+    System.out.println("[OK] Étape 9 validée ! fichier 512 o"); 
+}
+
+
+
+public static void testEleve2E9() {
+    System.out.println("=== TEST ÉTAPE 9.2 : Entrées/Sorties Fichier ===");
+
+    VirtualFileSystem vfs = new VirtualFileSystem();
+
+    assert vfs.createFile("/", "test.txt");
+
+
+    byte[] original = new byte[513]; 
+
+    Utils.writeInt(original, 0, 255);
+    Utils.writeInt(original, 509, 255);
+
+    boolean writeOk = vfs.writeFile(0, original);
+
+    assert writeOk : "Erreur d'écriture";
+
+    Inode inode = new Inode(vfs.getMemoryManager(), 0);
+
+    assert inode.getFileSize() == original.length : "Taille d'inode incorrecte";
+
+    byte[] readBytes = vfs.readFile(0);
+
+    assert readBytes != null : "Buffer null";
+
+    assert readBytes.length == original.length : "Longueur lue incorrecte";
+
+    for (int i = 0; i < original.length; i++) {
+        assert readBytes[i] == original[i] : "Octet incorrect à l'indice " + i;
+    }
+
+    int verificateur = 0;
+    for (int elt : inode.getDirectPointers()) {
+        if (elt != 0) {
+            verificateur++;
+        }
+    }
+    assert verificateur == 2 : "Problème de pointeurs directs";
+
+
+
+
+    int fileSize = inode.getFileSize();
+
+
+    byte[] fileData =  new byte[fileSize];
+
+    byte[] memory =  vfs.getMemoryManager().getFilesystemMemory();
+
+    int[] blockPointers =  inode.getDirectPointers();
+
+    assert Utils.readInt(memory, blockPointers[0] * MemoryManager.BLOCK_SIZE) == 255 : "problème premier int";
+    assert Utils.readInt(memory, blockPointers[0] * MemoryManager.BLOCK_SIZE + 508) == 0 : "problème second int b1";
+    assert Utils.readInt(memory, blockPointers[1] * MemoryManager.BLOCK_SIZE) == -16777216 : "problème second int b2"; // en binnaire ! [255][0][0][0]
+
+
+
+
+    System.out.println("[OK] Étape 9.2 validée ! fichier 513 o"); 
+
+
+}
+
+public static void testEleve3E9() {
+    System.out.println("=== TEST ÉTAPE 9.3 : Entrées/Sorties Fichier ===");
+
+    VirtualFileSystem vfs = new VirtualFileSystem();
+
+    assert vfs.createFile("/", "test.txt");
+
+
+    byte[] original = new byte[5121]; 
+
+    Utils.writeInt(original, 0, 255);
+    Utils.writeInt(original, 509, 255);
+
+    boolean writeOk = vfs.writeFile(0, original);
+
+    assert !writeOk : "Erreur d'écriture";
+
+
+    System.out.println("[OK] Étape 9.3 validée ! fichier trop grand"); 
+
+
+}
 
 
 
@@ -435,5 +564,9 @@ public class TestRunner {
 	testStep7();
 	testStep8();
         testStep9();
+
+        testEleve1E9(); // 512 o
+        testEleve2E9(); // 513 o
+        testEleve3E9(); // +10blocs
     }
 }

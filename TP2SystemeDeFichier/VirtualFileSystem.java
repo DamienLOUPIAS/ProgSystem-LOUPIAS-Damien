@@ -86,8 +86,8 @@ public class VirtualFileSystem {
         // Parcourir les blocs utilisés.
         // Copier chaque fragment vers fileData.
         for (int bloc = 0; bloc < 10; bloc++) { // Pas besoin de s'arrêter au premier pointeur nul comme il y a que 10 pointeur max
-            for (int i = 0; i < 512 && bloc * 512 + i < fileSize; i ++) {
-                fileData[bloc * 512 + i] = memory[blockPointers[bloc]  * MemoryManager.BLOCK_SIZE + i];
+            for (int i = 0; i < MemoryManager.BLOCK_SIZE && bloc * MemoryManager.BLOCK_SIZE + i < fileSize; i ++) {
+                fileData[bloc * MemoryManager.BLOCK_SIZE + i] = memory[blockPointers[bloc]  * MemoryManager.BLOCK_SIZE + i];
             }
         }
 
@@ -134,17 +134,14 @@ public class VirtualFileSystem {
         // - calculer son offset physique ;
         // - copier les données.
 
-        int aCopier = 512;
+       
+      
+
 
         for ( int bloc = 0; bloc < blocksNeeded; bloc++) {
-
-            if (!(bloc != blocksNeeded - 1)) {
-                aCopier = bytesRemaining % 513;
-            }
-
-
+            int aCopier =  Math.min(MemoryManager.BLOCK_SIZE, data.length - bloc * MemoryManager.BLOCK_SIZE);
             for (int i = 0; i < aCopier; i++) {
-                memory[blockPointers[bloc]  * MemoryManager.BLOCK_SIZE + i] = data[bloc * 512 + i];
+                memory[blockPointers[bloc]  * MemoryManager.BLOCK_SIZE + i] = data[bloc * MemoryManager.BLOCK_SIZE + i];
             }
 
         }
